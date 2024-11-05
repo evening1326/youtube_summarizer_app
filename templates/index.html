@@ -1,0 +1,46 @@
+<!--
+Nick DeMaestri
+11/4/2024
+CS-391
+
+Youtube Summarizer
+Note: Written using the provided Lecture8 files provided (https://github.com/gnolankettering/lecture8/tree/main/youtube) as well as ChatGPT-4o with canvas.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Video Summarizer</title>
+</head>
+<body>
+    <h1>YouTube Video Summarizer</h1>
+    <form id="summaryForm">
+        <label for="url">Enter YouTube URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Summarize</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("summaryForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const url = document.getElementById("url").value;
+            const response = await fetch("/summarize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: url })
+            });
+            const data = await response.json();
+            const resultDiv = document.getElementById("result");
+            if (data.summary) {
+                resultDiv.innerHTML = `<h2>Summary:</h2><p>${data.summary}</p>`;
+            } else {
+                resultDiv.innerHTML = `<h2>Error:</h2><p>${data.error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
